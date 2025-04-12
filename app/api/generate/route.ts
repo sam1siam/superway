@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     scrapePage(currentUrl),
   ]);
 
-  const prompt = buildPrompt({ inspirationUrl, inspoHTML, currentUrl, currentHTML });
+  const prompt = buildPrompt({ inspirationUrl, currentUrl });
 
   const completion = await openai.chat.completions.create({
     model: 'gpt-4',
