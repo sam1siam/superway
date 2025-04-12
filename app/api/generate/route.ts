@@ -2,7 +2,7 @@
 
 import OpenAI from 'openai';
 import { NextResponse } from 'next/server';
-import { scrapePage } from '@/lib/scraper';
+// import { scrapePage } from '@/lib/scraper';
 import { buildPrompt } from '@/lib/prompt';
 
 const openai = new OpenAI({
