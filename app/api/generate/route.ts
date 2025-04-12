@@ -12,10 +12,10 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   const { inspirationUrl, currentUrl } = await req.json();
 
-  const [inspoHTML, currentHTML] = await Promise.all([
+  await Promise.all([
     scrapePage(inspirationUrl),
     scrapePage(currentUrl),
-  ]);
+  ]);  
 
   const prompt = buildPrompt({ inspirationUrl, currentUrl });
 
