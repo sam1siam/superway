@@ -1,16 +1,11 @@
 type PromptInput = {
-    inspirationUrl: string;
-    inspoHTML: string;
-    currentUrl: string;
-    currentHTML: string;
-  };
+  inspirationUrl: string;
+  currentUrl: string;
+};
+
   
-  export function buildPrompt({
-    inspirationUrl,
-    inspoHTML,
-    currentUrl,
-    currentHTML,
-  }: PromptInput): string {
+ export function buildPrompt({ inspirationUrl, currentUrl }: PromptInput) {
+
     return `
   You are an expert web designer and AI developer.
   
