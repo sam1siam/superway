@@ -14,20 +14,18 @@ export default function HomePage() {
 
     const res = await fetch('/api/generate', {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ inspirationUrl, currentUrl }),
     });
 
-    const reader = res.body?.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
-
-    while (!done) {
-      const { value, done: doneReading } = await reader!.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      setResult((prev) => prev + chunkValue);
+    if (!res.ok) {
+      setResult('Something went wrong.');
+      setLoading(false);
+      return;
     }
 
+    const data = await res.json();
+    setResult(data.result || 'No content returned.');
     setLoading(false);
   }
 

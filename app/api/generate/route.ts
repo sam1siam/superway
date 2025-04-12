@@ -1,9 +1,13 @@
 // File: /app/api/generate/route.ts
-import { OpenAIStream, StreamingTextResponse, experimental_buildOpenAI } from 'ai';
+
+import OpenAI from 'openai';
+import { NextResponse } from 'next/server';
 import { scrapePage } from '@/lib/scraper';
 import { buildPrompt } from '@/lib/prompt';
 
-export const runtime = 'edge';
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req: Request) {
   const { inspirationUrl, currentUrl } = await req.json();
@@ -15,14 +19,13 @@ export async function POST(req: Request) {
 
   const prompt = buildPrompt({ inspirationUrl, inspoHTML, currentUrl, currentHTML });
 
-  const ai = experimental_buildOpenAI({ apiKey: process.env.OPENAI_API_KEY! });
-
-  const response = await ai.chat.completions.create({
+  const completion = await openai.chat.completions.create({
     model: 'gpt-4',
-    stream: true,
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const stream = OpenAIStream(response);
-  return new StreamingTextResponse(stream);
+  const output = completion.choices[0].message?.content ?? 'No content returned.';
+
+  return NextResponse.json({ result: output });
 }
+
